@@ -6,7 +6,7 @@ pub struct Font {
 }
 
 impl Font {
-    pub fn new() -> Self {
+    pub fn new() -> Box<Self> {
         let mut sprites = Vec::new();
 
         sprites.push(Sprite::new(&[0xF0, 0x90, 0x90, 0x90, 0xF0])); // 0
@@ -26,7 +26,7 @@ impl Font {
         sprites.push(Sprite::new(&[0xF0, 0x80, 0xF0, 0x80, 0xF0])); // E
         sprites.push(Sprite::new(&[0xF0, 0x80, 0xF0, 0x80, 0x80])); // F
 
-        Self { sprites }
+        Box::new(Self { sprites })
     }
 }
 

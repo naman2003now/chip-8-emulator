@@ -10,9 +10,9 @@ pub struct EventListener {
 }
 
 impl EventListener {
-    pub fn new(context: sdl2::Sdl) -> Result<Self, String> {
+    pub fn new(context: sdl2::Sdl) -> Result<Box<Self>, String> {
         let event_pump = context.event_pump()?;
-        Ok(Self { event_pump })
+        Ok(Box::new(Self { event_pump }))
     }
 }
 
