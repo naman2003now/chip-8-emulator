@@ -6,6 +6,7 @@ pub struct Hardware {
     pub delay_timer: u8,
     pub sound_timer: u8,
     pub registors: [u8; 16],
+    pub power_on: bool,
 }
 
 impl Hardware {
@@ -17,6 +18,7 @@ impl Hardware {
         let delay_timer = 0;
         let sound_timer = 0;
         let registors = [0; 16];
+        let power_on = true;
 
         Self {
             memory,
@@ -26,6 +28,7 @@ impl Hardware {
             delay_timer,
             sound_timer,
             registors,
+            power_on,
         }
     }
 }
@@ -78,5 +81,11 @@ mod tests {
     fn sound_timer() {
         let hardware = Hardware::new();
         assert_eq!(type_name_of_val(&hardware.sound_timer), type_name::<u8>());
+    }
+
+    #[test]
+    fn power_on() {
+        let hardware = Hardware::new();
+        assert_eq!(type_name_of_val(&hardware.power_on), type_name::<bool>());
     }
 }

@@ -39,6 +39,8 @@ impl Component for Font {
             }
         }
     }
+
+    fn clock(&self, _hardware: &mut crate::hardware::Hardware) {}
 }
 
 #[cfg(test)]

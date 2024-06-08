@@ -26,6 +26,17 @@ impl Emulator {
         }
         self
     }
+
+    pub fn run(&mut self) {
+        loop {
+            if self.hardware.power_on == false {
+                break;
+            }
+            for component in &self.components {
+                component.clock(&mut self.hardware);
+            }
+        }
+    }
 }
 
 #[cfg(test)]
@@ -37,6 +48,11 @@ mod tests {
     impl component::Component for TestComponent {
         fn init(&self, hardware: &mut Hardware) {
             hardware.pc = 0x100;
+        }
+
+        fn clock(&self, hardware: &mut Hardware) {
+            hardware.pc += 1;
+            hardware.power_on = false;
         }
     }
 
@@ -59,5 +75,14 @@ mod tests {
         emulator.register_component(Box::new(TestComponent));
         emulator.init();
         assert_eq!(emulator.hardware.pc, 0x100);
+    }
+
+    #[test]
+    fn test_emulator_run() {
+        let mut emulator = Emulator::new();
+        emulator.register_component(Box::new(TestComponent));
+        emulator.init();
+        emulator.run();
+        assert_eq!(emulator.hardware.pc, 0x101);
     }
 }
