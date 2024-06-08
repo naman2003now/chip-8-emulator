@@ -31,7 +31,7 @@ impl Font {
 }
 
 impl Component for Font {
-    fn init(&self, hardware: &mut crate::hardware::Hardware) {
+    fn init(&mut self, hardware: &mut crate::hardware::Hardware) {
         let start_memory = 0x50;
         for (i, sprite) in self.sprites.iter().enumerate() {
             for row in 0..sprite.get_height() {
@@ -53,7 +53,7 @@ mod tests {
 
     #[test]
     fn font_init() {
-        let font = Font::new();
+        let mut font = Font::new();
         let mut hardware = crate::hardware::Hardware::new();
         font.init(&mut hardware);
         assert_eq!(hardware.memory[0x50], 0xF0);

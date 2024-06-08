@@ -21,7 +21,7 @@ impl Emulator {
     }
 
     pub fn init(&mut self) -> &mut Self {
-        for component in &self.components {
+        for component in &mut self.components {
             component.init(&mut self.hardware);
         }
         self
@@ -32,7 +32,7 @@ impl Emulator {
             if self.hardware.power_on == false {
                 break;
             }
-            for component in &self.components {
+            for component in &mut self.components {
                 component.clock(&mut self.hardware);
             }
         }
@@ -46,11 +46,11 @@ mod tests {
     struct TestComponent;
 
     impl component::Component for TestComponent {
-        fn init(&self, hardware: &mut Hardware) {
+        fn init(&mut self, hardware: &mut Hardware) {
             hardware.pc = 0x100;
         }
 
-        fn clock(&self, hardware: &mut Hardware) {
+        fn clock(&mut self, hardware: &mut Hardware) {
             hardware.pc += 1;
             hardware.power_on = false;
         }

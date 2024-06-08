@@ -1,4 +1,4 @@
 pub trait Component {
-    fn init(&self, hardware: &mut crate::hardware::Hardware) {}
-    fn clock(&self, hardware: &mut crate::hardware::Hardware) {}
+    fn init(&mut self, _hardware: &mut crate::hardware::Hardware) {}
+    fn clock(&mut self, _hardware: &mut crate::hardware::Hardware) {}
 }
