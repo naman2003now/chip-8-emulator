@@ -1,5 +1,6 @@
+mod emulator;
 mod hardware;
 
 fn main() {
-    println!("Hello, world!");
+    emulator::Emulator::new().init();
 }
