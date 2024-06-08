@@ -1,11 +1,11 @@
 pub struct Hardware {
-    memory: [u8; 4096],
-    display: [u64; 32],
-    pc: u16,
-    i: u16,
-    delay_timer: u8,
-    sound_timer: u8,
-    registors: [u8; 16],
+    pub memory: [u8; 4096],
+    pub display: [u64; 32],
+    pub pc: u16,
+    pub i: u16,
+    pub delay_timer: u8,
+    pub sound_timer: u8,
+    pub registors: [u8; 16],
 }
 
 impl Hardware {
