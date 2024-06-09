@@ -14,11 +14,17 @@ impl Stack {
     }
 
     pub fn push(&mut self, value: u16) {
+        if self.top == self.size {
+            panic!("Stack overflow");
+        }
         self.data[self.top] = value;
         self.top += 1;
     }
 
     pub fn pop(&mut self) -> u16 {
+        if self.top == 0 {
+            panic!("Stack underflow");
+        }
         self.top -= 1;
         self.data[self.top]
     }
@@ -52,5 +58,21 @@ mod tests {
     fn top() {
         let stack = Stack::new();
         assert_eq!(stack.top, 0);
+    }
+
+    #[test]
+    #[should_panic(expected = "Stack overflow")]
+    fn stack_overflow() {
+        let mut stack = Stack::new();
+        for _ in 0..65 {
+            stack.push(0x200);
+        }
+    }
+
+    #[test]
+    #[should_panic(expected = "Stack underflow")]
+    fn stack_underflow() {
+        let mut stack = Stack::new();
+        stack.pop();
     }
 }
