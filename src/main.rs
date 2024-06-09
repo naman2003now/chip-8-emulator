@@ -10,7 +10,7 @@ fn main() -> Result<(), String> {
     let context = sdl2::init()?;
     emulator::Emulator::new()
         .register_component(font::Font::new())
-        .register_component(input_output::display::Display::new(
+        .register_component(input_output::display_output::DisplayOutput::new(
             800,
             400,
             context.clone(),

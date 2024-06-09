@@ -1,2 +1,2 @@
-pub mod display;
+pub mod display_output;
 pub mod event_listener;

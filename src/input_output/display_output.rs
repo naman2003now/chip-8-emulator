@@ -3,14 +3,14 @@ use crate::emulator::component::Component;
 extern crate sdl2;
 use sdl2::pixels::Color;
 
-pub struct Display {
+pub struct DisplayOutput {
     width: u32,
     height: u32,
 
     canvas: sdl2::render::Canvas<sdl2::video::Window>,
 }
 
-impl Display {
+impl DisplayOutput {
     pub fn new(width: u32, height: u32, context: sdl2::Sdl) -> Result<Box<Self>, String> {
         let video_subsystem = context.video()?;
 
@@ -44,7 +44,7 @@ impl Display {
     }
 }
 
-impl Component for Display {
+impl Component for DisplayOutput {
     fn clock(&mut self, hardware: &mut crate::hardware::Hardware) {
         self.canvas.set_draw_color(Color::RGB(15, 15, 15));
         self.canvas.clear();
