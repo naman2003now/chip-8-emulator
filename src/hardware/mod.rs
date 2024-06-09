@@ -1,3 +1,6 @@
+mod stack;
+use stack::Stack;
+
 pub struct Hardware {
     pub memory: [u8; 4096],
     pub display: [u64; 32],
@@ -7,6 +10,7 @@ pub struct Hardware {
     pub sound_timer: u8,
     pub registors: [u8; 16],
     pub power_on: bool,
+    pub stack: Stack,
 }
 
 impl Hardware {
@@ -19,6 +23,7 @@ impl Hardware {
         let sound_timer = 0;
         let registors = [0; 16];
         let power_on = true;
+        let stack = Stack::new();
 
         Self {
             memory,
@@ -29,6 +34,7 @@ impl Hardware {
             sound_timer,
             registors,
             power_on,
+            stack,
         }
     }
 }
