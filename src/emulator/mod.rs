@@ -1,10 +1,12 @@
 pub mod component;
 
 use crate::hardware::Hardware;
+use std::time::Instant;
 
 pub struct Emulator {
     hardware: Hardware,
     components: Vec<Box<dyn component::Component>>,
+    time_of_previous_cycle: u128,
 }
 
 impl Emulator {
@@ -12,6 +14,7 @@ impl Emulator {
         Self {
             hardware: Hardware::new(),
             components: Vec::new(),
+            time_of_previous_cycle: Instant::now().elapsed().as_millis(),
         }
     }
 
@@ -35,6 +38,17 @@ impl Emulator {
             for component in &mut self.components {
                 component.clock(&mut self.hardware);
             }
+            if (Instant::now().elapsed().as_millis() - self.time_of_previous_cycle) < 1000 / 60 {
+                continue;
+            }
+            self.cycle();
+            self.time_of_previous_cycle = Instant::now().elapsed().as_millis();
+        }
+    }
+
+    pub fn cycle(&mut self) {
+        for component in &mut self.components {
+            component.cycle(&mut self.hardware);
         }
     }
 }
