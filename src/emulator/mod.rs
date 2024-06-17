@@ -6,7 +6,7 @@ use std::time::Instant;
 pub struct Emulator {
     hardware: Hardware,
     components: Vec<Box<dyn component::Component>>,
-    time_of_previous_cycle: u128,
+    time_of_previous_cycle: Instant,
 }
 
 impl Emulator {
@@ -14,7 +14,7 @@ impl Emulator {
         Self {
             hardware: Hardware::new(),
             components: Vec::new(),
-            time_of_previous_cycle: Instant::now().elapsed().as_millis(),
+            time_of_previous_cycle: Instant::now(),
         }
     }
 
@@ -38,11 +38,11 @@ impl Emulator {
             for component in &mut self.components {
                 component.clock(&mut self.hardware);
             }
-            if (Instant::now().elapsed().as_millis() - self.time_of_previous_cycle) < 1000 / 60 {
+            if (self.time_of_previous_cycle.elapsed().as_millis() as u64) < (1000 / 60) {
                 continue;
             }
             self.cycle();
-            self.time_of_previous_cycle = Instant::now().elapsed().as_millis();
+            self.time_of_previous_cycle = Instant::now();
         }
     }
 
@@ -58,7 +58,6 @@ mod tests {
     use super::*;
 
     struct TestComponent;
-
     impl component::Component for TestComponent {
         fn init(&mut self, hardware: &mut Hardware) {
             hardware.pc = 0x100;
@@ -98,5 +97,32 @@ mod tests {
         emulator.init();
         emulator.run();
         assert_eq!(emulator.hardware.pc, 0x101);
+    }
+
+    struct TimedComponenet;
+    impl component::Component for TimedComponenet {
+        fn init(&mut self, hardware: &mut Hardware) {
+            hardware.pc = 0;
+        }
+
+        fn cycle(&mut self, hardware: &mut Hardware) {
+            if hardware.pc > 60 {
+                hardware.power_on = false;
+                return;
+            }
+            hardware.pc += 1;
+        }
+    }
+
+    #[test]
+    fn test_cycle_time() {
+        let mut emulator = Emulator::new();
+        let start = Instant::now();
+        emulator.register_component(Box::new(TimedComponenet));
+        emulator.init();
+        emulator.run();
+        assert_eq!(emulator.hardware.pc, 61);
+        println!("Elapsed: {}", start.elapsed().as_millis());
+        assert!((start.elapsed().as_millis() as i64 - 1000).abs() < 10);
     }
 }

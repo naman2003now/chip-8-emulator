@@ -5,6 +5,7 @@ mod font;
 mod hardware;
 mod input_output;
 mod sprite;
+mod timers;
 
 fn main() -> Result<(), String> {
     let context = sdl2::init()?;
@@ -16,6 +17,7 @@ fn main() -> Result<(), String> {
             context.clone(),
         )?)
         .register_component(input_output::event_listener::EventListener::new(context)?)
+        .register_component(timers::TimerComponent::new())
         .init()
         .run();
     Ok(())
