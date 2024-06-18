@@ -49,10 +49,10 @@ impl Component for DisplayOutput {
         self.canvas.set_draw_color(Color::RGB(15, 15, 15));
         self.canvas.clear();
         for y in 0..32 {
-            let row = hardware.display[y as usize];
             for x in 0..64 {
-                if (row >> (63 - x)) & 1 == 1 {
-                    self.color_pixel(x as u8, y);
+                let index = (y * 64 + x) as usize;
+                if hardware.display[index] == 1 {
+                    self.color_pixel(x as u8, y as u8);
                 }
             }
         }

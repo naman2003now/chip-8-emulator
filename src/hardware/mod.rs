@@ -3,7 +3,7 @@ use stack::Stack;
 
 pub struct Hardware {
     pub memory: [u8; 4096],
-    pub display: [u64; 32],
+    pub display: [u8; 32 * 64],
     pub pc: u16,
     pub i: u16,
     pub delay_timer: u8,
@@ -16,8 +16,8 @@ pub struct Hardware {
 impl Hardware {
     pub fn new() -> Self {
         let memory = [0; 4096];
-        let display = [0; 32];
-        let pc = 0;
+        let display = [0; 32 * 64];
+        let pc = 0x200;
         let i = 0;
         let delay_timer = 0;
         let sound_timer = 0;
@@ -54,8 +54,8 @@ mod tests {
     #[test]
     fn display() {
         let hardware = Hardware::new();
-        assert_eq!(hardware.display.len(), 32);
-        assert_eq!(type_name_of_val(&hardware.display[0]), type_name::<u64>());
+        assert_eq!(hardware.display.len(), 32 * 64);
+        assert_eq!(type_name_of_val(&hardware.display[0]), type_name::<u8>());
     }
 
     #[test]

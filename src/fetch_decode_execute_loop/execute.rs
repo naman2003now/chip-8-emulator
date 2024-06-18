@@ -6,7 +6,7 @@ impl FetchDecodeExecuteLoop {
         match instruction.opcode {
             0x0 => match instruction.nn {
                 0xE0 => Self::clear_screen(hardware),
-                _ => panic!("Unknown instruction: {:#X}", instruction.raw),
+                _ => {}
             },
             0x1 => hardware.pc = instruction.nnn,
             0x6 => Self::set_register(hardware, instruction),
@@ -38,18 +38,21 @@ impl FetchDecodeExecuteLoop {
     fn display(hardware: &mut Hardware, instruction: Instruction) {
         let x = hardware.registors[instruction.x as usize];
         let y = hardware.registors[instruction.y as usize];
-        let height = instruction.n;
+        let height = instruction.n as usize;
 
         hardware.registors[0xF] = 0;
-
-        for yline in 0..height {
-            let pixel = hardware.memory[hardware.i as usize + yline as usize];
-            for xline in 0..8 {
-                if (pixel & (0x80 >> xline)) != 0 {
-                    if hardware.display[(x + xline + ((y + yline) * 64)) as usize] == 1 {
+        let index = hardware.i as usize;
+        for row in 0..height {
+            let x = (x % 64) as usize;
+            let y = (y % 32) as usize;
+            let sprite = hardware.memory[index + row];
+            for col in 0..8 {
+                if (sprite & (0x80 >> col)) != 0 {
+                    let display_index = (x + col + ((y + row) * 64)) as usize;
+                    if hardware.display[display_index] == 1 {
                         hardware.registors[0xF] = 1;
                     }
-                    hardware.display[(x + xline + ((y + yline) * 64)) as usize] ^= 1;
+                    hardware.display[display_index] ^= 1;
                 }
             }
         }
