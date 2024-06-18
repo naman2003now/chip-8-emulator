@@ -1,6 +1,7 @@
 extern crate sdl2;
 
 mod emulator;
+mod fetch_decode_execute_loop;
 mod font;
 mod hardware;
 mod input_output;
@@ -18,6 +19,7 @@ fn main() -> Result<(), String> {
         )?)
         .register_component(input_output::event_listener::EventListener::new(context)?)
         .register_component(timers::TimerComponent::new())
+        .register_component(fetch_decode_execute_loop::FetchDecodeExecuteLoop::new())
         .init()
         .run();
     Ok(())
