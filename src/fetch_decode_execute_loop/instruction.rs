@@ -1,12 +1,12 @@
 #[derive(Debug, Clone, Copy)]
 pub struct Instruction {
-    raw: u16,
-    nnn: u16,
-    nn: u8,
-    n: u8,
-    x: u8,
-    y: u8,
-    opcode: u8,
+    pub raw: u16,
+    pub nnn: u16,
+    pub nn: u8,
+    pub n: u8,
+    pub x: u8,
+    pub y: u8,
+    pub opcode: u8,
 }
 
 impl Instruction {

@@ -1,3 +1,4 @@
+mod execute;
 mod instruction;
 
 use crate::emulator::component::Component;
@@ -9,7 +10,7 @@ impl Component for FetchDecodeExecuteLoop {
     fn clock(&mut self, hardware: &mut crate::hardware::Hardware) {
         let raw_instruction = Self::fetch(hardware);
         let instruction = Self::decode(raw_instruction);
-        // Self::execute(instruction, hardware);
+        Self::execute(hardware, instruction);
     }
 }
 
