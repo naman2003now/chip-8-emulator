@@ -10,7 +10,9 @@ mod timers;
 
 fn main() -> Result<(), String> {
     let context = sdl2::init()?;
-    emulator::Emulator::new()
+
+    let rom = std::env::args().nth(1).expect("No rom file provided");
+    emulator::Emulator::load(&rom)
         .register_component(font::Font::new())
         .register_component(input_output::display_output::DisplayOutput::new(
             800,

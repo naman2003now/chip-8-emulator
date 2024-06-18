@@ -3,6 +3,9 @@ pub mod component;
 use crate::hardware::Hardware;
 use std::time::Instant;
 
+use std::fs::File;
+use std::io::Read;
+
 pub struct Emulator {
     hardware: Hardware,
     components: Vec<Box<dyn component::Component>>,
@@ -10,6 +13,15 @@ pub struct Emulator {
 }
 
 impl Emulator {
+    pub fn load(filename: &str) -> Self {
+        let mut emulator = Emulator::new();
+
+        let mut f = File::open(&filename).expect("no file found");
+        let rom = &mut emulator.hardware.memory[0x200..];
+        f.read(rom).expect("buffer overflow");
+        emulator
+    }
+
     pub fn new() -> Self {
         Self {
             hardware: Hardware::new(),
@@ -72,7 +84,7 @@ mod tests {
     #[test]
     fn test_emulator_new() {
         let emulator = Emulator::new();
-        assert_eq!(emulator.hardware.pc, 0);
+        assert_eq!(emulator.hardware.pc, 0x200);
     }
 
     #[test]
